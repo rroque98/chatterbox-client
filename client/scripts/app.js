@@ -30,7 +30,7 @@ app.fetch = function() {
     //
     contentType: 'application/json',
     success: function (data) {
-
+    
       // check if dataString contains certain chars
       // if yes, splice those chars out
 
@@ -40,20 +40,18 @@ app.fetch = function() {
       // data = JSON.parse(escapedData);
 
       var rooms = [];
-debugger
+// debugger;
       for (var i = 0; i < data.results.length; i++) {
-        var escapedUsername = data.results[i].username;
-        var escapedMessage = data.results[i].text; 
-        var escapedTime = data.results[i].createdAt;
-        var escapedTime = data.results[i].updatedAt;
-        var escapedRoom = data.results[i].roomname;
+        var escapedUsername = app.escapeString(data.results[i].username);
+        var escapedMessage = app.escapeString(data.results[i].text); 
+        var escapedTime = app.escapeString(data.results[i].createdAt);
+        var escapedTime = app.escapeString(data.results[i].updatedAt);
+        var escapedRoom = app.escapeString(data.results[i].roomname);
         
         if (data.results[i].text !== undefined) {
 
           $('#chats').append(`<div> ${app.styleMessage(data.results[i])} </div>`);
-          if (escapedRoom !== undefined && 
-          !rooms.includes(escapedRoom) && 
-          escapedRoom !== '') {
+          if (escapedRoom !== undefined && !rooms.includes(escapedRoom) && escapedRoom !== '') {
             app.renderRoom(escapedRoom);
             rooms.push(escapedRoom);
           }
@@ -68,29 +66,35 @@ debugger
   });
 };
 app.escapeString = function(dataString) {
-      // var dataString = JSON.stringify(data);
-      dataString.split('<script>').join('');
-      dataString.split('</script>').join('');
-      dataString.split('&').join('');
-      dataString.split('<').join('');
-      dataString.split('>').join('');
-      dataString.split('/').join('');
-      dataString.split('+').join('');
-      dataString.split('-').join('');
-      dataString = JSON.parse(dataString);
-    return dataString;
+  if (dataString !== undefined) {
+    dataString = dataString.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  }
+  return dataString;
+  
+    //   // var dataString = JSON.stringify(data);
+    //   // dataString.split('<script>').join('');
+    //   // dataString.split('</script>').join('');
+    //   // dataString.split('&').join('');
+    //   dataString.split('<').join('');
+    //   dataString.split('>').join('');
+    //   // dataString.split('/').join('');
+    //   // dataString.split('+').join('');
+    //   // dataString.split('-').join('');
+    //   dataString = JSON.parse(dataString);
+    // }
+    // return dataString;
 };
 
 app.styleMessage = function(object) {
-  var str = `<div class = \"chatMessage ${object.roomname} \">`;
-  str += `<span class="roomname"> ROOM:${object.roomname} <span>`;
-  str += `<span class="username"><b> ${object.username} : </b><span>`;
-  str += `<span class="chatText"> ${object.text} <span>`;
+  var str = `<div class = \"chatMessage ${app.escapeString(object.roomname)} \">`;
+  str += `<span class="roomname"> ROOM:${app.escapeString(object.roomname)} </span>`;
+  str += `<span class="username"><b> ${app.escapeString(object.username)} : </b>/<span>`;
+  str += `<span class="chatText"> ${app.escapeString(object.text)} </span>`;
 
-  if (object.updatedAt === undefined) {
-    str += `<span class="time"> ${object.createdAt} </span>`;
+  if (app.escapeString(object.updatedAt) === undefined) {
+    str += `<span class="time"> ${app.escapeString(object.createdAt)} </span>`;
   } else {
-    str += `<span class="time">edited ${object.updatedAt} <span>`;
+    str += `<span class="time">edited ${app.escapeString(object.updatedAt)} </span>`;
   }
   str += "</div>";
   return str;
@@ -115,7 +119,8 @@ app.handleDisplayMessage = function(roomname) {
 }
 
 app.handleUsernameClick = function(event) {
-  $('.friendlist').append(`<div> ${$('.username')} </div>`);
+debugger;
+  $('.friendlist').append(`<div>  </div>`);
 };
 
 app.handleSubmit = function() {
@@ -137,18 +142,22 @@ app.init = function() {
   setInterval(app.fetch(), 5000);
 
 
-
+ //app.handleDisplayMessage($("#roomSelect option:selected").text());
 
   
  
-  //$('button').on('click', app.handleSubmit());
 };
 
 app.init();
 
 $(document).ready(function() {
-  $('.username').on('click', app.handleUsernameClick);
-  app.handleDisplayMessage($("#roomSelect option:selected").text());
+  $("#roomSelect").on('change', function() {
+    app.handleDisplayMessage($("#roomSelect option:selected").text());
+  });
+  $(document).on('click', ".username", function(event) {
+    app.handleUsernameClick(event);
+  });
+  //$('button').on('click', app.handleSubmit());
 });
 
 
