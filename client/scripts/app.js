@@ -27,20 +27,10 @@ app.fetch = function() {
     // This is the url you should use to communicate with the parse API server.
     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
-    //
     contentType: 'application/json',
     success: function (data) {
-    
-      // check if dataString contains certain chars
-      // if yes, splice those chars out
-
-
-      // var xssEscape = require('xss-escape');
-      // var escapedData = xssEscape(data);      
-      // data = JSON.parse(escapedData);
 
       var rooms = [];
-// debugger;
       for (var i = 0; i < data.results.length; i++) {
         var escapedUsername = app.escapeString(data.results[i].username);
         var escapedMessage = app.escapeString(data.results[i].text); 
@@ -57,7 +47,6 @@ app.fetch = function() {
           }
         }
       }
-    
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -70,19 +59,6 @@ app.escapeString = function(dataString) {
     dataString = dataString.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
   }
   return dataString;
-  
-    //   // var dataString = JSON.stringify(data);
-    //   // dataString.split('<script>').join('');
-    //   // dataString.split('</script>').join('');
-    //   // dataString.split('&').join('');
-    //   dataString.split('<').join('');
-    //   dataString.split('>').join('');
-    //   // dataString.split('/').join('');
-    //   // dataString.split('+').join('');
-    //   // dataString.split('-').join('');
-    //   dataString = JSON.parse(dataString);
-    // }
-    // return dataString;
 };
 
 app.styleMessage = function(object) {
@@ -116,10 +92,9 @@ app.renderRoom = function(room) {
 app.handleDisplayMessage = function(roomname) {
   $(".chatMessage").hide();
   $("." + roomname).show();
-}
+};
 
 app.handleUsernameClick = function(user) {
-debugger;
   $('.friendlist').append(`<div> ${user} </div>`);
 };
 
@@ -136,16 +111,8 @@ app.getUsername = function() {
 };
 
 
-app.init = function() {
-
-  
+app.init = function() { 
   setInterval(app.fetch(), 5000);
-
-
- //app.handleDisplayMessage($("#roomSelect option:selected").text());
-
-  
- 
 };
 
 app.init();
@@ -161,16 +128,15 @@ $(document).ready(function() {
     var message = {
       username: app.getUsername(), 
       text: $('#message').val(),
-      roomname: $(".roomname").text(),
+      roomname: $("#roomSelect").text(),
     };
     app.send(message);
   });
-  //$('button').on('click', app.handleSubmit());
 });
 
-app.generateSendMessage = function(message) {
+// app.generateSendMessage = function(message) {
   
-};
+// };
 
 
 
