@@ -27,10 +27,18 @@ app.fetch = function() {
     // This is the url you should use to communicate with the parse API server.
     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
-    data: JSON.stringify(message),
+    //
     contentType: 'application/json',
     success: function (data) {
-      console.log('message received');
+    //filter through data.results[i]///
+      //for if contains text append 
+      for (var i = 0; i < data.results.length; i++) {
+        if (data.results[i].text !== undefined) {
+          $('#chats').append(`<div> ${data.results[i].text} </div>`);
+          
+        }
+      }
+    
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -58,28 +66,27 @@ app.handleUsernameClick = function(event) {
   $('.friendlist').append(`<div> ${$('.username').data()} </div>`);
 };
 
-app.handleSubmit =  function() {
-  message.username = "username";
+app.handleSubmit = function() {
+  
+  message.username = window.location.search.slice(window.location.search.indexOf('=') + 1);
   message.roomname = $('#roomSelect');
   message.text = $('#message').val();
   app.send(message);
-}
+};
+
+app.getUsername = function() {
+  var currentUsername = window.location.search.slice(window.location.search.indexOf('=') + 1);
+  return currentUsername;
+};
 
 
 app.init = function() {
+  app.fetch();
   $('.username').on('click', app.handleUsernameClick());
-  $('button').on('click', app.handleSubmit());
+  //$('button').on('click', app.handleSubmit());
 };
 
-// $(document).ready(function() {
-//   $('.username').on('click', function() {
-//     $('.username').append('<p>friend added!</p>');
-//   //   //console.log('hello');
-//   });
-
-//   });
-// });
-
+app.init();
 
 var message = {
   username: 'shawndrost',
