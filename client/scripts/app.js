@@ -32,9 +32,11 @@ app.fetch = function() {
     success: function (data) {
     //filter through data.results[i]///
       //for if contains text append 
+debugger
+
       for (var i = 0; i < data.results.length; i++) {
         if (data.results[i].text !== undefined) {
-          $('#chats').append(`<div> ${data.results[i].text} </div>`);
+          $('#chats').append(`<div> ${app.styleMessage(data.results[i])} </div>`);
           
         }
       }
@@ -45,6 +47,17 @@ app.fetch = function() {
       console.error('chatterbox: Failed to send message', data);
     }
   });
+};
+
+app.styleMessage = function(object) {
+  var str = '<div class ="chatMessage">';
+  str += `<span class="time"> ${object.createdAt} </span>`; 
+  str += `<span class="roomname"> ${object.roomname} <span>`;
+  str += `<span class="chatText"> ${object.text} <span>`;
+  str += `<span class="time"> ${object.updatedAt} <span>`;
+  str += `<span class="username"> ${object.username} <span>`;
+  str += "</div>";
+  return str;
 };
 
 app.clearMessages = function() {

@@ -87,4 +87,15 @@ form input[type=text] {
     color: #fff;
     background-color: #0090da;
 }
-
+/*
+var str = '<div class ="chatMessage">';
+  str += `<span class="time"> ${object.createdAt} </span>`; 
+  str += `<span class="roomname"> ${object.roomname} <span>`;
+  str += `<span class="chatText"> ${object.text} <span>`;
+  str += `<span class="time"> ${object.updatedAt} <span>`;
+  str += `<span class="username"> ${object.username} <span>`;
+  str += "</div>";
+  return str;
+};
+//add CSS classes for these things
+*/
