@@ -118,9 +118,9 @@ app.handleDisplayMessage = function(roomname) {
   $("." + roomname).show();
 }
 
-app.handleUsernameClick = function(event) {
+app.handleUsernameClick = function(user) {
 debugger;
-  $('.friendlist').append(`<div>  </div>`);
+  $('.friendlist').append(`<div> ${user} </div>`);
 };
 
 app.handleSubmit = function() {
@@ -155,15 +155,22 @@ $(document).ready(function() {
     app.handleDisplayMessage($("#roomSelect option:selected").text());
   });
   $(document).on('click', ".username", function(event) {
-    app.handleUsernameClick(event);
+    app.handleUsernameClick( $(".username").text() );
+  });
+  $(document).on('click', "button", function(event) {
+    var message = {
+      username: app.getUsername(), 
+      text: $('#message').val(),
+      roomname: $(".roomname").text(),
+    };
+    app.send(message);
   });
   //$('button').on('click', app.handleSubmit());
 });
 
-
-var message = {
-  username: 'shawndrost',
-  text: 'trololo',
-  roomname: '4chan'
+app.generateSendMessage = function(message) {
+  
 };
+
+
 
