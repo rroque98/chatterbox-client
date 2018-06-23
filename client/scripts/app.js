@@ -32,7 +32,7 @@ app.fetch = function() {
     success: function (data) {
     //filter through data.results[i]///
       //for if contains text append 
-debugger
+// debugger
 
       for (var i = 0; i < data.results.length; i++) {
         if (data.results[i].text !== undefined) {
@@ -51,11 +51,18 @@ debugger
 
 app.styleMessage = function(object) {
   var str = '<div class ="chatMessage">';
-  str += `<span class="time"> ${object.createdAt} </span>`; 
+   
   str += `<span class="roomname"> ${object.roomname} <span>`;
+
+  str += `<span class="username"><b> ${object.username} : </b><span>`;
   str += `<span class="chatText"> ${object.text} <span>`;
-  str += `<span class="time"> ${object.updatedAt} <span>`;
-  str += `<span class="username"> ${object.username} <span>`;
+
+  if (object.updatedAt === undefined) {
+    str += `<span class="time"> ${object.createdAt} </span>`;
+  } else {
+    str += `<span class="time">edited ${object.updatedAt} <span>`;
+  }
+
   str += "</div>";
   return str;
 };
@@ -76,7 +83,7 @@ app.renderRoom = function(room) {
 
 
 app.handleUsernameClick = function(event) {
-  $('.friendlist').append(`<div> ${$('.username').data()} </div>`);
+  $('.friendlist').append(`<div> ${$('.username')} </div>`);
 };
 
 app.handleSubmit = function() {
